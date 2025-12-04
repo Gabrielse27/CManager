@@ -18,6 +18,7 @@ namespace CManager.Infrastructure.Repositories
             });
 
             File.WriteAllText(_filePath, json);
+            Console.WriteLine("Fil sparad som: " + Path.GetFullPath(_filePath));
         }
 
         public List<Customer> LoadCustomers()

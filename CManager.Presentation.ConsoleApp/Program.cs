@@ -8,7 +8,9 @@ var repo = new CustomerRepository();
 var customers = new List<Customer>
 {
     new Customer { FirstName = "Gabriel", LastName = "Seres" },
-    new Customer { FirstName = "Robert", LastName = "Seres" }
+    new Customer { FirstName = "Robert", LastName = "Seres" },
+    new Customer { FirstName = "Anna", LastName = "Andersson" },
+
 };
 
 repo.SaveCustomers(customers);
