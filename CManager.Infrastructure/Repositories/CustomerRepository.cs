@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text.Json;
 using CManager.Domain;
 using System.IO;
+using CManager.Application.Interfaces;
 
 namespace CManager.Infrastructure.Repositories
 {
-    public class CustomerRepository 
+    public class CustomerRepository : ICustomerRepository
     {
         private readonly string _filePath = "customers.json";
 

@@ -1,14 +1,43 @@
 ﻿using CManager.Application.Interfaces;
 using CManager.Domain;
 using CManager.Application.Services;
+using CManager.Infrastructure.Repositories;
 
 
-ICustomerService service = new CustomerService();
+// 1. Skapa repository
+ICustomerRepository repository = new CustomerRepository();
 
-// 1. Skapa tre kunder
-var c1 = service.CreateCustomer("Gabriel", "Seres");
-var c2 = service.CreateCustomer("Robert", "Seres");
-var c3 = service.CreateCustomer("Anna", "Andersson");
+// 2. Skapa service och skicka in repository
+ICustomerService service = new CustomerService(repository);
+
+
+var c1 = service.CreateCustomer(
+    "Gabriel",
+    "Seres",
+    "gabriel.seres@example.com",
+    "070-111 11 11",
+    "Testgatan 1",
+    "302 00",
+    "Halmstad");
+
+var c2 = service.CreateCustomer(
+    "Robert",
+    "Seres",
+    "robert.seres@example.com",
+    "070-222 22 22",
+    "Fotbollsvägen 10",
+    "302 10",
+    "Halmstad");
+
+var c3 = service.CreateCustomer(
+    "Anna",
+    "Andersson",
+    "anna.andersson@example.com",
+    "070-333 33 33",
+    "Bergsgatan 5",
+    "411 20",
+    "Göteborg");
+
 
 // 2. Visa alla kunder
 Console.WriteLine("---- Alla kunder ----");
