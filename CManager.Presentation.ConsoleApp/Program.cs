@@ -2,6 +2,7 @@
 using CManager.Domain;
 using CManager.Application.Services;
 using CManager.Infrastructure.Repositories;
+using CManager.Presentation.ConsoleApp.Controllers;
 
 
 // 1. Skapa repository
@@ -9,6 +10,9 @@ ICustomerRepository repository = new CustomerRepository();
 
 // 2. Skapa service och skicka in repository
 ICustomerService service = new CustomerService(repository);
+
+var controller = new CustomerController(service);
+controller.Start();
 
 
 var c1 = service.CreateCustomer(
@@ -63,41 +67,3 @@ foreach (var c in service.GetAllCustomers())
 {
     Console.WriteLine($"{c.Id} - {c.FirstName} {c.LastName}");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-var repo = new CustomerRepository();
-
-// Exempel: spara kunder
-var customers = new List<Customer>
-{
-    new Customer { FirstName = "Gabriel", LastName = "Seres" },
-    new Customer { FirstName = "Robert", LastName = "Seres" },
-    new Customer { FirstName = "Anna", LastName = "Andersson" },
-
-};
-
-repo.SaveCustomers(customers);
-
-// Exempel: hämta kunder
-var loaded = repo.LoadCustomers();
-
-foreach (var c in loaded)
-{
-    Console.WriteLine($"{c.FirstName} {c.LastName}");
-}
-*/
