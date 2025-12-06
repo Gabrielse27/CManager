@@ -10,7 +10,7 @@ namespace CManager.Application.Services
 {
     public class CustomerService : ICustomerService
     {
-        private readonly ICustomerRepository _repository;//List<Customer> _customers = new();//
+        private readonly ICustomerRepository _repository;
         private readonly List<Customer> _customers;
 
         public CustomerService(ICustomerRepository repository)
