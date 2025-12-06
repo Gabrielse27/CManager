@@ -36,19 +36,19 @@ namespace CManager.Presentation.ConsoleApp.Controllers
                 switch (choice)
                 {
                     case "1":
-                      //  CreateCustomerDialog();
+                        CreateCustomerDialog();
                             break;
 
                     case "2":
-                        //ShowAllCustomersDialog();
+                        ShowAllCustomersDialog();
                         break;
 
                     case "3":
-                        //ShowSpecificCustomerDialog();
+                        ShowSpecificCustomerDialog();
                         break;
 
                     case "4":
-                       // DeleteCustomerDialog();
+                        DeleteCustomerDialog();
                         break;
 
                     case "5":
@@ -60,7 +60,6 @@ namespace CManager.Presentation.ConsoleApp.Controllers
                             Console.ReadKey();
                             break;
                         }
-
                 }
                   
             }
@@ -68,19 +67,103 @@ namespace CManager.Presentation.ConsoleApp.Controllers
         }
 
 
+        // ---SKAPA KUND-----//
+        private void CreateCustomerDialog()
+        {
+            Console.Clear();
+            Console.WriteLine("-----Skapa Kund-----");
 
+            Console.Write("Förnamn: ");
+            var first = Console.ReadLine() ?? "";
 
+            Console.Write("Efternamn: ");
+            var last = Console.ReadLine() ?? "";
 
+            Console.Write("E-postadress: ");
+            var email = Console.ReadLine() ?? "";
 
+            Console.Write("Telefonnummer: ");
+            var phone = Console.ReadLine() ?? "";
 
+            Console.Write("Gatuadress: ");
+            var street = Console.ReadLine() ?? "";
 
+            Console.Write("Postnummer: ");
+            var postal = Console.ReadLine() ?? "";
 
+            Console.Write("Ort: ");
+            var city = Console.ReadLine() ?? "";
 
+            var customer = _service.CreateCustomer(first, last, email, phone, street, postal, city);
 
+            _service.SaveChanges();
 
+            Console.WriteLine($"\nKund Skapad ");
+            Console.ReadKey();
 
+        }
 
+        // -----VISA ALLA KUNDER-----//
+        private void ShowAllCustomersDialog()
+        {
+            Console.Clear();
+            Console.WriteLine("-----ALLA KUNDER-----");
 
+            var customers = _service.GetAllCustomers();
+
+            foreach ( var c in customers)
+            {
+                Console.WriteLine($"{c.FirstName} {c.LastName} - {c.Email}");
+            }
+
+            Console.ReadKey();
+
+        }
+
+        //-----VISA SPECIFIK KUND-----//
+        private void ShowSpecificCustomerDialog()
+
+        {
+            Console.Clear();
+            Console.WriteLine("----Visa Kund----");
+            Console.Write("Skriv Kundens e-post: ");
+            var email = Console.ReadLine() ?? "";
+
+            var customer = _service.GetCustomerByEmail(email);
+
+            if( customer == null)
+            {
+                Console.WriteLine("Kunden Hittades inte: ");
+            }
+            else
+            {
+                Console.WriteLine($"\nName: {customer.FirstName} {customer.LastName}");
+                Console.WriteLine($"ID: {customer.Id}");
+                Console.WriteLine($"Telephone: {customer.PhoneNumber}");
+                Console.WriteLine($"E-postadres: {customer.Email}");
+                Console.WriteLine($"Adress: {customer.Street}, {customer.PostalCode}, {customer.City}");
+            }
+
+            Console.ReadKey();
+
+        }
+
+        private void DeleteCustomerDialog()
+        {
+            Console.Clear();
+            Console.WriteLine("-----Ta Bort Kund-----");
+            Console.WriteLine("Skriv Epostadressen: ");
+            var email = Console.ReadLine() ?? "";
+
+            bool removed = _service.DeleteCustomerByEmail(email);
+            _service.SaveChanges();
+            if (removed)
+                Console.WriteLine("Kunden är Bortagen!");
+            else
+                Console.WriteLine("Kunden Hittades inte!");
+            Console.ReadKey();
+        }
+       
 
     }
 }
