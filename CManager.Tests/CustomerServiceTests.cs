@@ -1,9 +1,10 @@
 ﻿
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using CManager.Application.Helpers;
 using CManager.Application.Interfaces;
 using CManager.Application.Services;
 using CManager.Domain;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System.Collections.Generic;
 
 namespace CManager.Tests
@@ -20,7 +21,10 @@ namespace CManager.Tests
             mockRepo.Setup(r => r.LoadCustomers())
                     .Returns(new List<Customer>()); // return tom lista
 
-            var service = new CustomerService(mockRepo.Object);
+            var guidFactory = new GuidFactory();
+            var service = new CustomerService(mockRepo.Object, guidFactory);
+
+
 
             // Act – skapa kund
             var customer = service.CreateCustomer(

@@ -1,10 +1,15 @@
-﻿namespace CManager.Presentation.GuiApp
+﻿using Microsoft.Maui.Controls;
+
+namespace CManager.Presentation.GuiApp;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        // Registrera routes (bra för Shell-navigation)
+        Routing.RegisterRoute("customers", typeof(Views.CustomersPage));
+        Routing.RegisterRoute("create-customer", typeof(Views.CreateCustomerPage));
     }
 }

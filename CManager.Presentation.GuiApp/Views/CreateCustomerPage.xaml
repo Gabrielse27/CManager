@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CManager.Presentation.GuiApp.Views.CreateCustomerPage"
+             Title="Skapa Kund">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Entry Placeholder="Förnamn" Text="{Binding FirstName}" />
+            <Entry Placeholder="Efternamn" Text="{Binding LastName}" />
+            <Entry Placeholder="E-post" Text="{Binding Email}" />
+            <Entry Placeholder="Telefon" Text="{Binding Phone}" />
+
+            <Entry Placeholder="Gatuadress" Text="{Binding Street}" />
+            <Entry Placeholder="Postnummer" Text="{Binding PostalCode}" />
+            <Entry Placeholder="Ort" Text="{Binding City}" />
+
+            <Button Text="Spara kund"
+                    Command="{Binding SaveCustomerCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
+    
+    
+    
+    
+    
+    

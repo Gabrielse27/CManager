@@ -96,7 +96,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
 
             var customer = _service.CreateCustomer(first, last, email, phone, street, postal, city);
 
-            _service.SaveChanges();
+            _service.SaveChanges(customer);
 
             Console.WriteLine($"\nKund Skapad ");
             Console.ReadKey();
@@ -139,7 +139,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             {
                 Console.WriteLine($"\nName: {customer.FirstName} {customer.LastName}");
                 Console.WriteLine($"ID: {customer.Id}");
-                Console.WriteLine($"Telephone: {customer.PhoneNumber}");
+                Console.WriteLine($"Telephone: {customer.Phone}");
                 Console.WriteLine($"E-postadres: {customer.Email}");
                 Console.WriteLine($"Adress: {customer.Street}, {customer.PostalCode}, {customer.City}");
             }
@@ -156,7 +156,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             var email = Console.ReadLine() ?? "";
 
             bool removed = _service.DeleteCustomerByEmail(email);
-            _service.SaveChanges();
+          //  _service.SaveChanges();
             if (removed)
                 Console.WriteLine("Kunden är Bortagen!");
             else

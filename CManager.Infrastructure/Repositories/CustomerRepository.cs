@@ -4,34 +4,34 @@ using System.Text.Json;
 using CManager.Domain;
 using System.IO;
 using CManager.Application.Interfaces;
+using CManager.Infrastructure.Formatters;
+
 
 namespace CManager.Infrastructure.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
         private readonly string _filePath = "customers.json";
-
-        public void SaveCustomers(List<Customer> customers)
-        {
-            var json = JsonSerializer.Serialize(customers, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-
-            File.WriteAllText(_filePath, json);
-            Console.WriteLine("Fil sparad som: " + Path.GetFullPath(_filePath));
-        }
+        private readonly JsonFormatter _formatter = new JsonFormatter();
 
         public List<Customer> LoadCustomers()
         {
             if (!File.Exists(_filePath))
-                return new List<Customer>(); // Returnera tom lista om fil saknas
+                return new List<Customer>();
 
-            var json = File.ReadAllText(_filePath);
-            return JsonSerializer.Deserialize<List<Customer>>(json)!;
+            string json = File.ReadAllText(_filePath);
+            var customers = _formatter.Deserialize<List<Customer>>(json);
+
+            return customers ?? new List<Customer>();
         }
 
+        public void SaveCustomers(List<Customer> customers)
+        {
+            string json = _formatter.Serialize(customers);
+            File.WriteAllText(_filePath, json);
 
 
-    }
+
+
+    }   }   
 }

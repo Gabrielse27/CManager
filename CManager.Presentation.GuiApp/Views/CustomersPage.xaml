@@ -1,12 +1,49 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CManager.Presentation.GuiApp.Views.CustomersPage"
-             Title="CustomersPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:viewmodels="clr-namespace:CManager.Presentation.GuiApp.ViewModels"
+             x:Class="CManager.Presentation.GuiApp.Views.CustomersPage">
+
+    
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10">
+
+            <Label Text="Add Customer" FontSize="24" />
+
+            <Entry Placeholder="First Name" Text="{Binding FirstName}" />
+            <Entry Placeholder="Last Name" Text="{Binding LastName}" />
+            <Entry Placeholder="Email" Text="{Binding Email}" />
+            <Entry Placeholder="Phone" Text="{Binding Phone}" />
+            <Entry Placeholder="Street" Text="{Binding Street}" />
+            <Entry Placeholder="Postal Code" Text="{Binding PostalCode}" />
+            <Entry Placeholder="City" Text="{Binding City}" />
+
+            <Button Text="Add Customer"
+                    Command="{Binding AddCustomerCommand}"
+                    BackgroundColor="DodgerBlue"
+                    TextColor="White"/>
+
+            <Label Text="Customers List" FontSize="24" Margin="0,20,0,0" />
+
+            <CollectionView ItemsSource="{Binding Customers}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="LightGray" Padding="10" Margin="0,5">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding FirstName}" />
+                                <Label Text="{Binding LastName}" />
+                                <Label Text="{Binding Email}" />
+                                <Label Text="{Binding Phone}" />
+                                <Label Text="{Binding Street}" />
+                                <Label Text="{Binding PostalCode}" />
+                                <Label Text="{Binding City}" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>
