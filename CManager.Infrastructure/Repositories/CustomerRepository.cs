@@ -29,9 +29,43 @@ namespace CManager.Infrastructure.Repositories
         {
             string json = _formatter.Serialize(customers);
             File.WriteAllText(_filePath, json);
+        }
 
+        public void UpdateCustomer(Customer updateCustomer)
+        {
+            var customers = LoadCustomers();
+            var existingCustomer = customers.FirstOrDefault(c => c.Id == updateCustomer.Id);
 
+            if (existingCustomer != null)
+            {
+                existingCustomer.FirstName = updateCustomer.FirstName;
+                existingCustomer.LastName = updateCustomer.LastName;
+                existingCustomer.Email = updateCustomer.Email;
+                existingCustomer.Phone = updateCustomer.Phone;
+                existingCustomer.Street = updateCustomer.Street;
+                existingCustomer.PostalCode = updateCustomer.PostalCode;
+                existingCustomer.City = updateCustomer.City;
 
+                SaveCustomers(customers);
+            }
+        }
+    
+        public void DelteCustomer(Guid id)
+        {
+            var customers = LoadCustomers();
 
-    }   }   
+            var customerToDelete = customers.FirstOrDefault(c => c.Id == id);
+
+            if (customerToDelete != null)
+            {
+                customers.Remove(customerToDelete);
+                SaveCustomers(customers);
+            }
+        }
+
+    }
 }
+
+    
+           
+
