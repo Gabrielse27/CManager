@@ -7,10 +7,10 @@ using System.Text;
 
     namespace CManager.Application.Helpers;
    
-        public class GuidFactory
+        public static class GuidFactory
         {
-              public Guid CreateGuid()
-             {
+              public static Guid Create()
+              {
                  return Guid.NewGuid();
               }
 

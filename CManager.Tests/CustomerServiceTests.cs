@@ -13,35 +13,35 @@ namespace CManager.Tests
     public class CustomerServiceTests
     {
         [TestMethod]
-        public void CreateCustomer_ShouldReturnCustomerWithCorrectValues()
+        public async Task CreateCustomerAsync_Should_Call_Repository_AddAsync()
         {
-            // Arrange – mock repository
+            // 1. ARRANGE (Förberedelser)
+
+            // Skapa en "Mock" (falsk version) av Repositoryt
             var mockRepo = new Mock<ICustomerRepository>();
 
-            mockRepo.Setup(r => r.LoadCustomers())
-                    .Returns(new List<Customer>()); // return tom lista
+            // Skapa servicen.
+            var service = new CustomerService(mockRepo.Object);
 
-            var guidFactory = new GuidFactory();
-            var service = new CustomerService(mockRepo.Object, guidFactory);
+            // Skapa kunden som vi ska testa med
+            var newCustomer = new Customer
+            {
+                FirstName = "Gabriel",
+                LastName = "Seres",
+                Email = "gabriel@example.com",
+                Phone = "070101010",
+                Street = "Brogatan 1",
+                PostalCode = "30258",
+                City = "Halmstad"
+            };
 
+            // 2. ACT (Utförandet)
+            // Vi kör den asynkrona metoden
+            await service.CreateCustomerAsync(newCustomer);
 
-
-            // Act – skapa kund
-            var customer = service.CreateCustomer(
-                "Gabriel",
-                "Seres",
-                "gabriel@example.com",
-                "070101010",
-                "Brogatan 1",
-                "30258",
-                "Halmstad"
-            );
-
-            // Assert – kontrollera resultatet
-            Assert.IsNotNull(customer);
-            Assert.AreEqual("Gabriel", customer.FirstName);
-            Assert.AreEqual("Seres", customer.LastName);
-            Assert.AreEqual("gabriel@example.com", customer.Email);
+            // 3. ASSERT (Kontroll)
+            // Vi kollar att Repositoryts "AddAsync"-metod blev anropad exakt 1 gång
+            mockRepo.Verify(r => r.AddAsync(It.IsAny<Customer>()), Times.Once);
         }
     }
 }

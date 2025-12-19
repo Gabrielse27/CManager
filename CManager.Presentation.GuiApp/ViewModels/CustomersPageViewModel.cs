@@ -6,37 +6,63 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using CManager.Application.Interfaces;
 using CManager.Domain;
+using CManager.Presentation.GuiApp.Views;
 
 
 
 
+namespace CManager.Presentation.GuiApp.ViewModels;
 
-
-
-
-namespace CManager.Presentation.GuiApp.ViewModels
+public partial class CustomersPageViewModel : ObservableObject
 {
-    public partial class CustomersPageViewModel : ObservableObject
+    private readonly ICustomerService _customerService;
+    private readonly MainViewModel _mainViewModel; 
+
+    // Vi tar in MainViewModel här i konstruktorn
+    public CustomersPageViewModel(ICustomerService customerService, MainViewModel mainViewModel)
     {
-        private readonly ICustomerService _service;
+        _customerService = customerService;
+        _mainViewModel = mainViewModel; // Vi sparar referensen
+        LoadCustomersAsync();
+    }
 
+    [ObservableProperty]
+    private ObservableCollection<Customer> customers = new();
 
-            public CustomersPageViewModel(ICustomerService service)
-            {
-            _service = service;
-                LoadCustomers();
-            }
-        [ObservableProperty]
-        ObservableCollection<Customer> customers = new();
-        //private ObservableCollection<Customer> Customers;
+    public async Task LoadCustomersAsync()
+    {
+        var list = await _customerService.GetAllCustomersAsync();
+        Customers = new ObservableCollection<Customer>(list);
+    }
 
-        [RelayCommand]
-        private void LoadCustomers()
+    // Gå till "Skapa kund"-sida
+    [RelayCommand]
+    private void GoToCreateCustomerPage()
+    {
+        // Här byter vi vy via MainViewModel istället för Shell
+        _mainViewModel.CurrentViewModel = new CreateCustomerViewModel(_customerService, _mainViewModel);
+    }
+
+    // Navigera till kunddetaljer
+    [RelayCommand]
+    private void GoToDetails(Customer customer)
+    {
+        if (customer != null)
         {
-            var list = _service.GetAllCustomers();
-            Customers = new ObservableCollection<Customer>(list);
+            // Vi skapar detaljvyn och skickar med både Service och MainViewModel
+            var detailVm = new CustomerDetailViewModel(_customerService, _mainViewModel);
+            detailVm.Customer = customer;
+            _mainViewModel.CurrentViewModel = detailVm;
         }
+    }
 
-
+    [RelayCommand]
+    private void DeleteCustomer(Customer customer)
+    {
+        if (customer != null)
+        {
+            _customerService.DeleteCustomerAsync(customer.Id);
+            Customers.Remove(customer);
+        }
     }
 }

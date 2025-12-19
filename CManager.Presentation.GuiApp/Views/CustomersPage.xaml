@@ -1,49 +1,40 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:CManager.Presentation.GuiApp.ViewModels"
-             x:Class="CManager.Presentation.GuiApp.Views.CustomersPage">
+             xmlns:vm="clr-namespace:CManager.Presentation.GuiApp.ViewModels"
+             xmlns:model="clr-namespace:CManager.Domain;assembly=CManager.Domain"
+             x:Class="CManager.Presentation.GuiApp.Views.CustomersPage"
+             x:DataType="vm:CustomersPageViewModel">
 
-    
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="10">
+    <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="10">
+        <HorizontalStackLayout Grid.Row="0" Spacing="20">
+            <Label Text="Kundlista" FontSize="24" VerticalOptions="Center" FontAttributes="Bold"/>
 
-            <Label Text="Add Customer" FontSize="24" />
-
-            <Entry Placeholder="First Name" Text="{Binding FirstName}" />
-            <Entry Placeholder="Last Name" Text="{Binding LastName}" />
-            <Entry Placeholder="Email" Text="{Binding Email}" />
-            <Entry Placeholder="Phone" Text="{Binding Phone}" />
-            <Entry Placeholder="Street" Text="{Binding Street}" />
-            <Entry Placeholder="Postal Code" Text="{Binding PostalCode}" />
-            <Entry Placeholder="City" Text="{Binding City}" />
-
-            <Button Text="Add Customer"
-                    Command="{Binding AddCustomerCommand}"
+            <Button Text="Add Customer" 
+                    Command="{Binding GoToCreateCustomerPageCommand}"
                     BackgroundColor="DodgerBlue"
                     TextColor="White"/>
+        </HorizontalStackLayout>
 
-            <Label Text="Customers List" FontSize="24" Margin="0,20,0,0" />
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Customers}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Customer">
+                    <Frame Margin="0,5" Padding="15" BorderColor="LightGray" CornerRadius="5">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CustomersPageViewModel}}, Path=GoToDetailsCommand}"
+                                                  CommandParameter="{Binding .}"/>
+                        </Frame.GestureRecognizers>
 
-            <CollectionView ItemsSource="{Binding Customers}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BorderColor="LightGray" Padding="10" Margin="0,5">
-                            <VerticalStackLayout>
-                                <Label Text="{Binding FirstName}" />
-                                <Label Text="{Binding LastName}" />
-                                <Label Text="{Binding Email}" />
-                                <Label Text="{Binding Phone}" />
-                                <Label Text="{Binding Street}" />
-                                <Label Text="{Binding PostalCode}" />
-                                <Label Text="{Binding City}" />
-                            </VerticalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
-        </VerticalStackLayout>
-    </ScrollView>
-
-</ContentPage>
+                        <VerticalStackLayout>
+                            <Label Text="{Binding FirstName}" FontAttributes="Bold" FontSize="16"/>
+                            <Label Text="{Binding LastName}" FontAttributes="Bold" FontSize="16"/>
+                            <Label Text="{Binding Email}" TextColor="Gray" FontSize="12"/>
+                            <Label Text="{Binding Phone}" TextColor="Gray" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentView>

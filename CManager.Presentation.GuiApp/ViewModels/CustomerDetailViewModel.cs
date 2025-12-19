@@ -7,61 +7,54 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using CManager.Application.Helpers;
 
-namespace CManager.Presentation.GuiApp.ViewModels
+
+
+namespace CManager.Presentation.GuiApp.ViewModels;
+
+public partial class CustomerDetailViewModel : ObservableObject
 {
-    public partial class CustomerDetailViewModel : ObservableObject
+    private readonly ICustomerService _customerService;
+    private readonly MainViewModel _mainViewModel; // <--- Lägg till denna
+
+    // Uppdatera konstruktorn att ta emot MainViewModel
+    public CustomerDetailViewModel(ICustomerService customerService, MainViewModel mainViewModel)
     {
-        private readonly ICustomerService _service;
+        _customerService = customerService;
+        _mainViewModel = mainViewModel;
+    }
 
-        public CustomerDetailViewModel(ICustomerService service)
+    [ObservableProperty]
+    private Customer customer;
+
+    [RelayCommand]
+    private async Task Save()
+    {
+        if (Customer != null)
         {
-            _service = service;
+            await _customerService.UpdateCustomerAsync(Customer);
+
+            // Gå tillbaka till listan genom att byta vy i MainViewModel
+            _mainViewModel.CurrentViewModel = new CustomersPageViewModel(_customerService, _mainViewModel);
         }
+    }
 
-        // ---- Input från UI ----
-        [ObservableProperty]
-        private string email = string.Empty;
+    [RelayCommand]
+    private void Cancel()
+    {
+        // Gå tillbaka utan att spara
+        _mainViewModel.CurrentViewModel = new CustomersPageViewModel(_customerService, _mainViewModel);
+    }
 
-        // ---- Kunddata som ska visas ----
-        
-        [ObservableProperty] private string firstName = string.Empty;
-        [ObservableProperty] private string lastName = string.Empty;
-        [ObservableProperty] private string phone = string.Empty;
-        [ObservableProperty] private string street = string.Empty;
-        [ObservableProperty] private string postalCode = string.Empty;
-        [ObservableProperty] private string city = string.Empty;
-        [ObservableProperty] private string customerId = string.Empty;
+    // Delete-logiken kan du behålla som den var, men ändra navigeringen på slutet:
+    [RelayCommand]
+    private async Task DeleteCustomer()
+    {
+        if (Customer == null) return;
+        await _customerService.DeleteCustomerAsync(Customer.Id);
 
-        // ---- Kommandon ----
-        [RelayCommand]
-        private void LoadCustomer()
-        {
-            var customer = _service.GetCustomerByEmail(email);
-
-            if (customer == null)
-            {
-                // Töm fälten om ingen kund hittas
-                FirstName = LastName = Phone =
-                Street = PostalCode = City = CustomerId = string.Empty;
-                return;
-            }
-
-            // Fyll ViewModel med kunddata
-            
-            FirstName = customer.FirstName;
-            LastName = customer.LastName;
-            Phone = customer.Phone;
-            Street = customer.Street;
-            PostalCode = customer.PostalCode;
-            City = customer.City;
-            CustomerId = customer.Id.ToString();
-        }
-
-        [RelayCommand]
-        private async Task GoBack()
-        {
-            await Shell.Current.GoToAsync(".."); // Navigerar tillbaka
-        }
+        // Gå tillbaka
+        _mainViewModel.CurrentViewModel = new CustomersPageViewModel(_customerService, _mainViewModel);
     }
 }

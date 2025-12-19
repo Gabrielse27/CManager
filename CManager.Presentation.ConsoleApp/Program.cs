@@ -6,15 +6,14 @@ using CManager.Presentation.ConsoleApp.Controllers;
 using CManager.Application.Helpers;
 
 
-// 1. Skapa repository
+//Skapa repository
 var repository = new CustomerRepository();
 
-var guidFactory = new GuidFactory();
 
+// Skapa service
+// Vi skickar  in repositoryt. Servicen sköter ID-skapandet själv internt.
+var service = new CustomerService(repository);
 
-// 2. Skapa service och skicka in repository + guidFactory
-var service = new CustomerService(repository, guidFactory);
-
+//  Starta kontrollern
 var controller = new CustomerController(service);
 controller.Start();
-

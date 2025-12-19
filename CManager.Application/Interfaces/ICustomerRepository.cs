@@ -9,15 +9,22 @@ using System.IO;
 
 
 
-namespace CManager.Application.Interfaces
+
+namespace CManager.Application.Interfaces;
+public interface ICustomerRepository
 {
-    public interface ICustomerRepository
-    {
-        // Spara lista av kunder till JSON-fil
-        void SaveCustomers(List<Customer> customers);
+    // Hämta alla (Async)
+    Task<List<Customer>> GetAllAsync();
 
-        // Ladda kunder från JSON-fil och returnera listan
-        List<Customer> LoadCustomers();
+    // Hämta en specifik (Async)
+    Task<Customer?> GetByIdAsync(Guid id);
 
-    }
+    // Lägg till (Async)
+    Task AddAsync(Customer customer);
+
+    // Uppdatera (Async)
+    Task UpdateAsync(Customer customer);
+
+    // Ta bort (Async)
+    Task DeleteAsync(Guid id);
 }

@@ -4,11 +4,11 @@ using CManager.Presentation.GuiApp.ViewModels;
 
 namespace CManager.Presentation.GuiApp.Views;
 
-public partial class CreateCustomerPage : ContentPage
+public partial class CreateCustomerPage : ContentView
 {
-	public CreateCustomerPage(ICustomerService service)
+	public CreateCustomerPage()
 	{
 		InitializeComponent();
-		BindingContext = new CreateCustomerViewModel(service);
+	
 	}
 }

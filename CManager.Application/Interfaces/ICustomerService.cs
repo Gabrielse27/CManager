@@ -3,27 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CManager.Application.Interfaces
+
+
+namespace CManager.Application.Interfaces;
+
+public interface ICustomerService
 {
-    public interface ICustomerService
-    {
+    // Hämta alla
+    Task<List<Customer>> GetAllCustomersAsync();
 
-        Customer CreateCustomer(string firstName, string lastName, string email, string phone, string street, string postalCode, string city);
-        List<Customer> GetAllCustomers();
+    // Hämta en
+    Task<Customer?> GetCustomerAsync(Guid id);
 
-        Customer? GetCustomerById(Guid id);
-        Customer? GetCustomerByEmail(string email);
-        
+    // Skapa
+    Task CreateCustomerAsync(Customer customer);
 
+    // Uppdatera (Denna saknades!)
+    Task UpdateCustomerAsync(Customer customer);
 
-        bool UpdateCustomer(Customer customer);
-
-       
-      
-        bool DeleteCustomer(Guid id);
-        bool DeleteCustomerByEmail(string email);
-
-        bool SaveChanges(Customer customer);
-
-    }
-}      
+    // Ta bort
+    Task DeleteCustomerAsync(Guid id);
+}
