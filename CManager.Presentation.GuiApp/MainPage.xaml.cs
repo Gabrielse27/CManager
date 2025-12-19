@@ -1,24 +1,16 @@
-﻿namespace CManager.Presentation.GuiApp
+﻿
+using CManager.Presentation.GuiApp.ViewModels;
+
+namespace CManager.Presentation.GuiApp;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    // Vi tar in MainViewModel via Dependency Injection
+    public MainPage(MainViewModel viewModel)
     {
-        int count = 0;
+        InitializeComponent();
 
-        public MainPage()
-        {
-            InitializeComponent();
-        }
-
-        private void OnCounterClicked(object? sender, EventArgs e)
-        {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
+        // HÄR ÄR NYCKELN: Vi kopplar ihop XAML med koden
+        BindingContext = viewModel;
     }
 }

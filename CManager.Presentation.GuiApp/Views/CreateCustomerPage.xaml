@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CManager.Presentation.GuiApp.ViewModels"
+             x:Class="CManager.Presentation.GuiApp.Views.CreateCustomerPage"
+             x:DataType="vm:CreateCustomerViewModel">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="30">
+
+            <Label Text="Registrera Ny Kund" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+
+            <VerticalStackLayout Spacing="10">
+                <Entry Text="{Binding FirstName}" Placeholder="Förnamn" />
+                <Entry Text="{Binding LastName}" Placeholder="Efternamn" />
+                <Entry Text="{Binding Email}" Keyboard="Email" Placeholder="Email" />
+                <Entry Text="{Binding Phone}" Keyboard="Telephone" Placeholder="Telefonnummer" />
+
+                <BoxView HeightRequest="1" Color="LightGray" Margin="0,10"/>
+
+                <Entry Text="{Binding Street}" Placeholder="Gatuadress" />
+                <Grid ColumnDefinitions="*,*">
+                    <Entry Grid.Column="0" Text="{Binding PostalCode}" Keyboard="Numeric" Placeholder="Postnummer" Margin="0,0,5,0"/>
+                    <Entry Grid.Column="1" Text="{Binding City}" Placeholder="Ort" Margin="5,0,0,0"/>
+                </Grid>
+            </VerticalStackLayout>
+
+            <Button Text="Spara Kund" 
+                    Command="{Binding SaveCustomerCommand}" 
+                    BackgroundColor="DodgerBlue" 
+                    TextColor="White"
+                    Margin="70,20,70,0"/>
+
+            <Button Text="Avbryt" 
+                    Command="{Binding CancelCommand}" 
+                    BackgroundColor="Transparent" 
+                    TextColor="Red" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentView>
+    
+    
+    

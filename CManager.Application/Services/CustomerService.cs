@@ -4,97 +4,55 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using CManager.Application.Interfaces;
 using CManager.Domain;
+using CManager.Application.Helpers;
+using System.Linq;
 
 
-namespace CManager.Application.Services
+
+
+namespace CManager.Application.Services;
+
+public class CustomerService : ICustomerService
 {
-    public class CustomerService : ICustomerService
+    private readonly ICustomerRepository _customerRepository;
+
+    public CustomerService(ICustomerRepository customerRepository)
     {
-        private readonly ICustomerRepository _repository;
-        private readonly List<Customer> _customers;
+        _customerRepository = customerRepository;
+    }
 
-        public CustomerService(ICustomerRepository repository)
+    public async Task<List<Customer>> GetAllCustomersAsync()
+    {
+        return await _customerRepository.GetAllAsync();
+    }
+
+    public async Task<Customer?> GetCustomerAsync(Guid id)
+    {
+        return await _customerRepository.GetByIdAsync(id);
+    }
+
+    public async Task CreateCustomerAsync(Customer customer)
+    {
+        //Använd helper-klass för att skapa ID
+        // Om du har en static metod i GuidFactory:
+        customer.Id = GuidFactory.Create();
+
+        if (customer.Id == Guid.Empty)
         {
-            _repository = repository;
-
-            // Ladda kunder från fil vid start
-            _customers = _repository.LoadCustomers();
-        }
-        public Customer CreateCustomer
-           (string firstName,
-            string lastName, 
-            string email, 
-            string phone, 
-            string street, 
-            string postalcode, 
-            string city)  
-        {
-            var customer = new Customer
-            {
-                Id = Guid.NewGuid(),
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                PhoneNumber = phone,
-                Street = street,
-                PostalCode = postalcode,
-                City = city
-
-            };
-
-            _customers.Add(customer);
-            return customer;
+            customer.Id = Guid.NewGuid();
         }
 
-        public List<Customer> GetAllCustomers()
-        {
-            return _customers;
-        }
+        await _customerRepository.AddAsync(customer);
+    }
 
-        public Customer? GetCustomerById(Guid id)
-        {
-            return _customers.FirstOrDefault(c => c.Id == id);
-        }
+    public async Task UpdateCustomerAsync(Customer customer)
+    {
+        // Här anropar vi repositoryt som sparar till filen
+        await _customerRepository.UpdateAsync(customer);
+    }
 
-        // <summary>
-        /// Hämtar kund via e-postadress.
-        /// </summary>
-        public Customer? GetCustomerByEmail(string email)
-        {
-            return _customers.FirstOrDefault(c => c.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
-        }
-
-
-        public bool DeleteCustomer(Guid id)
-        {
-            var customer = GetCustomerById(id);
-            if (customer == null)
-                return false;
-
-            _customers.Remove(customer);
-            SaveChanges();
-            return true;
-        }
-
-        public bool DeleteCustomerByEmail(string email)
-        {
-            var customer = GetCustomerByEmail(email);
-            if (customer == null)
-                return false;
-
-            _customers.Remove(customer);
-            SaveChanges();
-            return true;
-        }
-        /// <summary>
-        /// Sparar aktuell lista till JSON-fil via Repository.
-        /// </summary>
-        public void SaveChanges()
-        {
-            _repository.SaveCustomers(_customers);
-        }
-
-
-
+    public async Task DeleteCustomerAsync(Guid id)
+    {
+        await _customerRepository.DeleteAsync(id);
     }
 }

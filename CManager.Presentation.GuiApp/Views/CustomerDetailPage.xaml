@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CManager.Presentation.GuiApp.ViewModels"
+             x:Class="CManager.Presentation.GuiApp.Views.CustomerDetailPage"
+             x:DataType="vm:CustomerDetailViewModel"
+             >
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="10">
+
+            <Label Text="Redigera Kund" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+
+            <VerticalStackLayout Spacing="10">
+
+                <Label Text="Förnamn" FontSize="12" TextColor="Gray"/>
+                <Entry Text="{Binding Customer.FirstName}" WidthRequest ="400" HorizontalOptions="Start" Placeholder="Förnamn" />
+
+                <Label Text="Efternamn" FontSize="12" TextColor="Gray"/>
+                <Entry Text="{Binding Customer.LastName}" WidthRequest ="400" HorizontalOptions="Start" Placeholder="Efternamn" />
+
+                <Label Text="Email" FontSize="12" TextColor="Gray"/>
+                <Entry Text="{Binding Customer.Email}" WidthRequest="400" HorizontalOptions="Start" Keyboard="Email" Placeholder="Email" />
+
+                <Label Text="Telefon" FontSize="12" TextColor="Gray"/>
+                <Entry Text="{Binding Customer.Phone}" WidthRequest ="400" HorizontalOptions="Start" Keyboard="Telephone" Placeholder="Telefonnummer" />
+
+                <BoxView HeightRequest="1" Color="LightGray" Margin="0,10"/>
+                <Label Text="Adressinformation" FontAttributes="Bold" />
+
+                <Label Text="Gatuadress" FontSize="12" TextColor="Gray"/>
+                <Entry Text="{Binding Customer.Street}" WidthRequest="750" HorizontalOptions="Start" Placeholder="Gatuadress" />
+
+                <Grid ColumnDefinitions="*,*">
+                    <VerticalStackLayout Grid.Column="0" Margin="0,0,5,0">
+                        <Label Text="Postnummer" FontSize="12" TextColor="Gray"/>
+                        <Entry Text="{Binding Customer.PostalCode}" Keyboard="Numeric" Placeholder="123 45" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" Margin="5,0,0,0">
+                        <Label Text="Ort" FontSize="12" TextColor="Gray"/>
+                        <Entry Text="{Binding Customer.City}" Placeholder="Ort" />
+                    </VerticalStackLayout>
+                </Grid>
+
+            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="25" Margin="0,20,0,0">
+
+
+                <Button Grid.Column="0" 
+                        Text="Spara Kund" 
+                        Command="{Binding SaveCommand}" 
+                        BackgroundColor="Green" 
+                        TextColor="White"
+              
+                        WidthRequest="150"/>
+
+                <Button Grid.Column="1" 
+                        Text="Avbryt" 
+                        Command="{Binding CancelCommand}" 
+                        BackgroundColor="Transparent" 
+                        TextColor="Red" 
+                        WidthRequest="150"
+                        BorderColor="Red" BorderWidth="1"/>
+            </Grid>
+
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,20">
+
+                <Button Grid.Column="0" 
+                        Text="Ta bort Kund" 
+                        Command="{Binding DeleteCustomerCommand}" 
+                        BackgroundColor="Red"
+                        WidthRequest="150"
+                        TextColor="White"/>
+
+                <Button Grid.Column="1" 
+                        Text="Tillbaka" 
+                        Command="{Binding GoBackCommand}"
+                        WidthRequest="150"
+                        BackgroundColor="Gray" 
+                        TextColor="White"/>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentView>

@@ -70,6 +70,8 @@ namespace CManager.Presentation.ConsoleApp.Controllers
         // ---SKAPA KUND-----//
         private void CreateCustomerDialog()
         {
+            
+
             Console.Clear();
             Console.WriteLine("-----Skapa Kund-----");
 
@@ -94,9 +96,22 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.Write("Ort: ");
             var city = Console.ReadLine() ?? "";
 
-            var customer = _service.CreateCustomer(first, last, email, phone, street, postal, city);
 
-            _service.SaveChanges();
+            var newCustomer = new Customer
+            {
+                FirstName = first,
+                LastName = last,
+                Email = email,
+                Phone = phone,
+                Street = street,
+                PostalCode = postal,
+                City = city
+            };
+
+
+
+            _service.CreateCustomerAsync(newCustomer).GetAwaiter().GetResult();
+     
 
             Console.WriteLine($"\nKund Skapad ");
             Console.ReadKey();
@@ -109,7 +124,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.Clear();
             Console.WriteLine("-----ALLA KUNDER-----");
 
-            var customers = _service.GetAllCustomers();
+            var customers = _service.GetAllCustomersAsync().GetAwaiter().GetResult();
 
             foreach ( var c in customers)
             {
@@ -129,9 +144,10 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.Write("Skriv Kundens e-post: ");
             var email = Console.ReadLine() ?? "";
 
-            var customer = _service.GetCustomerByEmail(email);
+            var customers = _service.GetAllCustomersAsync().GetAwaiter().GetResult();
+            var customer = customers.FirstOrDefault(x => x.Email == email);
 
-            if( customer == null)
+            if ( customer == null)
             {
                 Console.WriteLine("Kunden Hittades inte: ");
             }
@@ -139,7 +155,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             {
                 Console.WriteLine($"\nName: {customer.FirstName} {customer.LastName}");
                 Console.WriteLine($"ID: {customer.Id}");
-                Console.WriteLine($"Telephone: {customer.PhoneNumber}");
+                Console.WriteLine($"Telephone: {customer.Phone}");
                 Console.WriteLine($"E-postadres: {customer.Email}");
                 Console.WriteLine($"Adress: {customer.Street}, {customer.PostalCode}, {customer.City}");
             }
@@ -155,10 +171,16 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.WriteLine("Skriv Epostadressen: ");
             var email = Console.ReadLine() ?? "";
 
-            bool removed = _service.DeleteCustomerByEmail(email);
-            _service.SaveChanges();
-            if (removed)
+            var customers = _service.GetAllCustomersAsync().GetAwaiter().GetResult();
+            var customerToDelete = customers.FirstOrDefault(x => x.Email == email);
+
+         
+            if (customerToDelete != null)
+            {
+
+                _service.DeleteCustomerAsync(customerToDelete.Id).GetAwaiter().GetResult();
                 Console.WriteLine("Kunden är Bortagen!");
+            }
             else
                 Console.WriteLine("Kunden Hittades inte!");
             Console.ReadKey();

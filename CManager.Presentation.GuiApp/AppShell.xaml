@@ -2,5 +2,19 @@
 <Shell
     x:Class="CManager.Presentation.GuiApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:CManager.Presentation.GuiApp.Views">
+
+    <!-- Start-sida med kundlista -->
+    <ShellContent
+        Route="customers"
+        Title="Kunder"
+        ContentTemplate="{DataTemplate views:CustomersPage}" />
+
+    <!-- Sida för att skapa kund -->
+    <ShellContent
+        Route="create-customer"
+        Title="Ny kund"
+        ContentTemplate="{DataTemplate views:CreateCustomerPage}" />
+
 </Shell>

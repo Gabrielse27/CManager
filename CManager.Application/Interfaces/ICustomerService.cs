@@ -3,30 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CManager.Application.Interfaces
+
+
+namespace CManager.Application.Interfaces;
+
+public interface ICustomerService
 {
-    public interface ICustomerService
-    {
-        
-        Customer CreateCustomer(string firstName, string lastname, string email, string phoneNumber, string street, string postalCode, string city);
+    // Hämta alla
+    Task<List<Customer>> GetAllCustomersAsync();
 
-        // Hämta alla kunder //
-        List<Customer> GetAllCustomers();
+    // Hämta en
+    Task<Customer?> GetCustomerAsync(Guid id);
 
-        // Hämta kund via ID //
-        Customer? GetCustomerById(Guid id);
+    // Skapa
+    Task CreateCustomerAsync(Customer customer);
 
-        // Hämta kund via e-postadress //
-        Customer? GetCustomerByEmail(string email);
+    // Uppdatera (Denna saknades!)
+    Task UpdateCustomerAsync(Customer customer);
 
-        // Ta bort kund via ID
-        bool DeleteCustomer(Guid id);
-
-        // Ta bort kund via epostadress //
-        bool DeleteCustomerByEmail(string email);
-
-        // Spara lista till fil
-        void SaveChanges();
-
-    }
+    // Ta bort
+    Task DeleteCustomerAsync(Guid id);
 }
