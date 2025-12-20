@@ -47,7 +47,7 @@ public partial class CreateCustomerViewModel : ObservableObject
             City = City
         };
 
-        await _service.CreateCustomerAsync(newCustomer);
+        await _service.SaveCustomerAsync(newCustomer);
 
         // Gå tillbaka till listan via MainViewModel
         _mainViewModel.CurrentViewModel = new CustomersPageViewModel(_service, _mainViewModel);

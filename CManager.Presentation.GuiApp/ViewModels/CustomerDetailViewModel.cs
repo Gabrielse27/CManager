@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using CManager.Application.Helpers;
-
+using Application = Microsoft.Maui.Controls.Application;
 
 
 namespace CManager.Presentation.GuiApp.ViewModels;
@@ -33,7 +33,7 @@ public partial class CustomerDetailViewModel : ObservableObject
     {
         if (Customer != null)
         {
-            await _customerService.UpdateCustomerAsync(Customer);
+            await _customerService.SaveCustomerAsync(Customer);
 
             // Gå tillbaka till listan genom att byta vy i MainViewModel
             _mainViewModel.CurrentViewModel = new CustomersPageViewModel(_customerService, _mainViewModel);
@@ -47,14 +47,10 @@ public partial class CustomerDetailViewModel : ObservableObject
         _mainViewModel.CurrentViewModel = new CustomersPageViewModel(_customerService, _mainViewModel);
     }
 
-    // Delete-logiken kan du behålla som den var, men ändra navigeringen på slutet:
-    [RelayCommand]
-    private async Task DeleteCustomer()
-    {
-        if (Customer == null) return;
-        await _customerService.DeleteCustomerAsync(Customer.Id);
 
-        // Gå tillbaka
+    [RelayCommand]
+    public void GoBack()
+    {
         _mainViewModel.CurrentViewModel = new CustomersPageViewModel(_customerService, _mainViewModel);
     }
 }

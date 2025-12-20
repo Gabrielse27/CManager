@@ -16,7 +16,7 @@ namespace CManager.Presentation.GuiApp.ViewModels;
 public partial class CustomersPageViewModel : ObservableObject
 {
     private readonly ICustomerService _customerService;
-    private readonly MainViewModel _mainViewModel; 
+    private readonly MainViewModel _mainViewModel;
 
     // Vi tar in MainViewModel här i konstruktorn
     public CustomersPageViewModel(ICustomerService customerService, MainViewModel mainViewModel)
@@ -31,7 +31,7 @@ public partial class CustomersPageViewModel : ObservableObject
 
     public async Task LoadCustomersAsync()
     {
-        var list = await _customerService.GetAllCustomersAsync();
+        var list = await _customerService.GetCustomersAsync();
         Customers = new ObservableCollection<Customer>(list);
     }
 
@@ -56,13 +56,25 @@ public partial class CustomersPageViewModel : ObservableObject
         }
     }
 
+
     [RelayCommand]
-    private void DeleteCustomer(Customer customer)
+    public async Task DeleteFromList(Customer customer)
     {
-        if (customer != null)
-        {
-            _customerService.DeleteCustomerAsync(customer.Id);
-            Customers.Remove(customer);
-        }
+        if (customer == null) return;
+
+        // 1. Fråga användaren först 
+        bool answer = await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert(
+    "Ta bort",
+    $"Vill du verkligen ta bort {customer.FirstName} {customer.LastName}?",
+    "Ja", "Nej");
+
+        if (!answer) return;
+
+
+        // 2. Ta bort från databasen/filen via servicen
+        await _customerService.DeleteCustomerAsync(customer.Id);
+
+        // 3. Ta bort från listan som syns på skärmen direkt.
+        Customers.Remove(customer);
     }
 }

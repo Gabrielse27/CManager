@@ -15,7 +15,6 @@ namespace CManager.Tests
         [TestMethod]
         public async Task CreateCustomerAsync_Should_Call_Repository_AddAsync()
         {
-            // 1. ARRANGE (Förberedelser)
 
             // Skapa en "Mock" (falsk version) av Repositoryt
             var mockRepo = new Mock<ICustomerRepository>();
@@ -35,9 +34,8 @@ namespace CManager.Tests
                 City = "Halmstad"
             };
 
-            // 2. ACT (Utförandet)
             // Vi kör den asynkrona metoden
-            await service.CreateCustomerAsync(newCustomer);
+            await service.SaveCustomerAsync(newCustomer);
 
             // 3. ASSERT (Kontroll)
             // Vi kollar att Repositoryts "AddAsync"-metod blev anropad exakt 1 gång

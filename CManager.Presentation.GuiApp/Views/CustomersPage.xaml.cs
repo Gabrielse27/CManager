@@ -1,8 +1,10 @@
+
+using CManager.Domain;
 using CManager.Presentation.GuiApp.ViewModels;
+
 
 namespace CManager.Presentation.GuiApp.Views;
 
-// Ändra till ContentView här också!
 public partial class CustomersPage : ContentView
 {
     public CustomersPage()
@@ -10,6 +12,28 @@ public partial class CustomersPage : ContentView
         InitializeComponent();
     }
 
-    // Vi behöver inte "OnAppearing" här längre, 
-    // för din ViewModel laddar datan automatiskt i sin konstruktor!
+    private async void OnDeleteClicked(object sender, EventArgs e)
+    {
+        var button = sender as Button;
+        var customer = button?.BindingContext as Customer;
+
+        if (customer == null) return;
+
+        // Vi skriver "Microsoft.Maui.Controls.Application" för att undvika krockar
+        bool answer = await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert(
+            "Ta bort kund",
+            $"Vill du ta bort {customer.FirstName}?",
+            "Ja",
+            "Nej"
+        );
+
+        if (!answer) return;
+
+        if (this.BindingContext is CustomersPageViewModel vm)
+        {
+            await vm.DeleteFromList(customer);
+        }
+    }
+
+
 }
