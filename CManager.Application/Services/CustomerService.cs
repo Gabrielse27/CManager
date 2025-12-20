@@ -35,7 +35,8 @@ public class CustomerService : ICustomerService
         if (customer.Id == Guid.Empty)
         {
             // Skapa ID (antingen via Factory eller direkt)
-            customer.Id = Guid.NewGuid();
+      
+            customer.Id = IdGenerator.CreateId();
 
             await _customerRepository.AddAsync(customer);
         }
