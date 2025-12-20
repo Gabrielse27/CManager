@@ -110,7 +110,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
 
 
 
-            _service.CreateCustomerAsync(newCustomer).GetAwaiter().GetResult();
+            _service.SaveCustomerAsync(newCustomer).GetAwaiter().GetResult();
      
 
             Console.WriteLine($"\nKund Skapad ");
@@ -124,7 +124,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.Clear();
             Console.WriteLine("-----ALLA KUNDER-----");
 
-            var customers = _service.GetAllCustomersAsync().GetAwaiter().GetResult();
+            var customers = _service.GetCustomersAsync().GetAwaiter().GetResult();
 
             foreach ( var c in customers)
             {
@@ -144,7 +144,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.Write("Skriv Kundens e-post: ");
             var email = Console.ReadLine() ?? "";
 
-            var customers = _service.GetAllCustomersAsync().GetAwaiter().GetResult();
+            var customers = _service.GetCustomersAsync().GetAwaiter().GetResult();
             var customer = customers.FirstOrDefault(x => x.Email == email);
 
             if ( customer == null)
@@ -171,7 +171,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.WriteLine("Skriv Epostadressen: ");
             var email = Console.ReadLine() ?? "";
 
-            var customers = _service.GetAllCustomersAsync().GetAwaiter().GetResult();
+            var customers = _service.GetCustomersAsync().GetAwaiter().GetResult();
             var customerToDelete = customers.FirstOrDefault(x => x.Email == email);
 
          

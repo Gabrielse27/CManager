@@ -56,7 +56,6 @@
                         Command="{Binding SaveCommand}" 
                         BackgroundColor="Green" 
                         TextColor="White"
-              
                         WidthRequest="150"/>
 
                 <Button Grid.Column="1" 

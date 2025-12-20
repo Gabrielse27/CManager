@@ -6,10 +6,13 @@
              x:Class="CManager.Presentation.GuiApp.Views.CustomersPage"
              x:DataType="vm:CustomersPageViewModel">
 
-
     <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="10">
+
         <HorizontalStackLayout Grid.Row="0" Spacing="20">
-            <Label Text="Kundlista" FontSize="24" VerticalOptions="Center" FontAttributes="Bold"/>
+            <Label Text="Kundlista" 
+                   FontSize="24" 
+                   VerticalOptions="Center" 
+                   FontAttributes="Bold"/>
 
             <Button Text="Add Customer" 
                     Command="{Binding GoToCreateCustomerPageCommand}"
@@ -21,17 +24,32 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:Customer">
                     <Frame Margin="0,5" Padding="15" BorderColor="LightGray" CornerRadius="5">
+
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CustomersPageViewModel}}, Path=GoToDetailsCommand}"
                                                   CommandParameter="{Binding .}"/>
                         </Frame.GestureRecognizers>
 
-                        <VerticalStackLayout>
-                            <Label Text="{Binding FirstName}" FontAttributes="Bold" FontSize="16"/>
-                            <Label Text="{Binding LastName}" FontAttributes="Bold" FontSize="16"/>
-                            <Label Text="{Binding Email}" TextColor="Gray" FontSize="12"/>
-                            <Label Text="{Binding Phone}" TextColor="Gray" FontSize="12"/>
-                        </VerticalStackLayout>
+                        <Grid ColumnDefinitions="*, Auto">
+
+                            <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                <Label Text="{Binding FirstName}" FontAttributes="Bold" FontSize="16"/>
+                                <Label Text="{Binding LastName}" FontAttributes="Bold" FontSize="16"/>
+                                <Label Text="{Binding Email}" TextColor="Gray" FontSize="12"/>
+                                <Label Text="{Binding Phone}" TextColor="Gray" FontSize="12"/>
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="🗑" 
+                                    BackgroundColor="Red"
+                                    TextColor="Red"
+                                    FontSize="20"
+                                    VerticalOptions="Center"
+                                    ZIndex="10"
+                                    Clicked="OnDeleteClicked"
+                                    CommandParameter="{Binding .}" />
+
+                        </Grid>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
