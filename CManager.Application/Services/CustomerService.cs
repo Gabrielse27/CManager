@@ -34,7 +34,7 @@ public class CustomerService : ICustomerService
         // Om kunden saknar ID (Guid.Empty), då är det en NY kund -> Skapa
         if (customer.Id == Guid.Empty)
         {
-            // Skapa ID (antingen via Factory eller direkt)
+            // Skapa ID 
       
             customer.Id = IdGenerator.CreateId();
 
