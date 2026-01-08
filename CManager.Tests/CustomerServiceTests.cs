@@ -120,7 +120,7 @@ namespace CManager.Tests
 
             // ASSERT
             // Vi verifierar att servicen skickade vidare exakt samma ID till repots Delete-metod.
-            mockRepo.Verify(r => r.DeleteAsync(customerid), Times.Once);
+            mockRepo.Verify(r => r.DeleteAsync (customerid), Times.Once);
         }
     }
 }

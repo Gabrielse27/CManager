@@ -11,20 +11,27 @@ using System.IO;
 
 
 namespace CManager.Application.Interfaces;
-public interface ICustomerRepository
-{
-    // Hämta alla (Async)
-    Task<List<Customer>> GetAllAsync();
 
-    // Hämta en specifik (Async)
-    Task<Customer?> GetByIdAsync(Guid id);
+    // KRAV: Interface Segregation Principle (ISP) - Små specifika interfaces
 
-    // Lägg till (Async)
-    Task AddAsync(Customer customer);
+    // Ett interface BARA för att läsa(Read)
+    public interface IReadRepository
+    {
+        Task<List<Customer>> GetAllAsync();
+        Task<Customer?> GetByIdAsync(Guid id);
+    }
+    // Ett interface BARA för att skriva/ändra (Write)
+    public interface IWriteRepository
+    {
+        Task AddAsync(Customer customer);
+        Task UpdateAsync(Customer customer);
+        Task DeleteAsync(Guid id);
+    }
 
-    // Uppdatera (Async)
-    Task UpdateAsync(Customer customer);
 
-    // Ta bort (Async)
-    Task DeleteAsync(Guid id);
-}
+    // huvud-interface som binder ihop dem.
+    // Detta är det interface du injicerar i din Service.
+    public interface ICustomerRepository : IReadRepository , IWriteRepository
+   {
+    //den ärver allt från de två ovanför.
+   }

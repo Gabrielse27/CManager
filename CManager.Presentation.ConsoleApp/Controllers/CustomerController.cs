@@ -11,15 +11,24 @@ namespace CManager.Presentation.ConsoleApp.Controllers
 {
     public class CustomerController
     {
+
+        // "readonly" betyder att vi bara får sätta denna en gång (i konstruktorn).
+        // Vi använder Interfacet (ICustomerService) för att följa Dependency Injection-principen.
+        // "Dependency Injection" används för att frikoppla klasserna från varandra. Istället för att klasserna skapar sina egna beroenden (med 'new'), injiceras de via konstruktorn.
         private readonly ICustomerService _service;
 
+        // Konstruktorn: Denna körs när programmet startar upp.
+        // Här tar vi emot (injicerar) den färdiga Servicen så att Controllern kan använda den.
         public CustomerController(ICustomerService service)
         {
             _service = service;
         }
 
+        // Huvudmetoden som startar menysystemet.
         public void Start()
         {
+            // while (true) skapar en "evig loop". 
+            // Detta gör att programmet inte stängs av efter ett val, utan återvänder till menyn.
             while (true)
             {
                 Console.Clear();
@@ -31,6 +40,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
                 Console.WriteLine("5. Avsluta");
                 Console.Write("Välj ett alternativ: ");
 
+                // Läser in vad användaren skriver. "!" betyder att vi lovar att det inte är null.
                 string choice = Console.ReadLine()!;
 
                 switch (choice)
@@ -67,7 +77,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
         }
 
 
-        // ---SKAPA KUND-----//
+        // Metod för att skapa en ny kund.
         private void CreateCustomerDialog()
         {
             
@@ -109,7 +119,9 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             };
 
 
-
+            // Vi skickar objektet till Servicen som sparar det till filen.
+            // .GetAwaiter().GetResult() används för att tvinga koden att vänta på att sparningen blir klar 
+            // (eftersom detta är en synkron konsol-metod men servicen är asynkron).
             _service.SaveCustomerAsync(newCustomer).GetAwaiter().GetResult();
      
 
@@ -123,9 +135,10 @@ namespace CManager.Presentation.ConsoleApp.Controllers
         {
             Console.Clear();
             Console.WriteLine("-----ALLA KUNDER-----");
-
+            // Hämtar alla kunder från servicen.
             var customers = _service.GetCustomersAsync().GetAwaiter().GetResult();
 
+            // Vi loopar igenom varje kund (c) i listan och skriver ut den på skärmen.
             foreach ( var c in customers)
             {
                 Console.WriteLine($"{c.FirstName} {c.LastName} - {c.Email}");
@@ -144,7 +157,11 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.Write("Skriv Kundens e-post: ");
             var email = Console.ReadLine() ?? "";
 
+            // Hämtar alla kunder
             var customers = _service.GetCustomersAsync().GetAwaiter().GetResult();
+
+            // sedan använder vi LINQ (FirstOrDefault) för att leta upp RÄTT kund baserat på e-posten.
+            // x => x.Email == email betyder "Leta efter den kund vars Email matchar det vi skrev in".
             var customer = customers.FirstOrDefault(x => x.Email == email);
 
             if ( customer == null)
@@ -163,7 +180,7 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.ReadKey();
 
         }
-
+        // Metod för att ta bort kunden
         private void DeleteCustomerDialog()
         {
             Console.Clear();
@@ -171,13 +188,14 @@ namespace CManager.Presentation.ConsoleApp.Controllers
             Console.WriteLine("Skriv Epostadressen: ");
             var email = Console.ReadLine() ?? "";
 
+            // Vi måste först hitta kunden för att få tag på dess ID.
             var customers = _service.GetCustomersAsync().GetAwaiter().GetResult();
             var customerToDelete = customers.FirstOrDefault(x => x.Email == email);
 
-         
-            if (customerToDelete != null)
-            {
 
+            if (customerToDelete != null) 
+            {
+                // Om kunden finns, tar vi dess ID och skickar till Servicens Delete-metod.
                 _service.DeleteCustomerAsync(customerToDelete.Id).GetAwaiter().GetResult();
                 Console.WriteLine("Kunden är Bortagen!");
             }

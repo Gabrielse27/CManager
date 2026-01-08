@@ -9,12 +9,10 @@ using System.Text;
    
         public static class GuidFactory
         {
-              public static Guid Create()
+              public static Guid CreateId()
               {
                  return Guid.NewGuid();
               }
-
-
         }
     
    

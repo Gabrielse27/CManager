@@ -19,11 +19,19 @@ public class CustomerRepository : ICustomerRepository
 
     public CustomerRepository()
     {
-        // Vi skapar en instans av din befintliga formatter
+        // Vi skapar en instans av vår hjälpklass som sköter JSON- konverterning. 
         _formatter = new JsonFormatter();
 
+        // Vi använder "Environment.SpecialFolder.LocalApplicationData".
+        // På Windows blir det "AppData", men på en Android-telefon
+        // blir det en helt annan skyddad mapp som appen får skriva till.
+        // Detta gör att koden fungerar på ALLA enheter (Cross-platform).
         // Vi sparar filen i AppData så den fungerar på både PC och Mobil
         var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+
+        // Path.Combine lägger ihop mappen och filnamnet och sätter automatiskt in rätt 
+        // snedstreck (\ eller /) beroende på om det är Windows eller Android.
         _filePath = Path.Combine(folder, "customers.json");
     }
 
@@ -58,15 +66,23 @@ public class CustomerRepository : ICustomerRepository
         await SaveToFile();
     }
 
-    public async Task UpdateAsync(Customer customer)
+    public async Task UpdateAsync (Customer customer)
     {
+        // Vi hämtar den senaste listan från filen för att vara säkra på att vi har aktuell data.
+        // Detta gör vi för att inte råka skriva över något om filen ändrats nyss.
         _customers = await GetAllAsync();
 
+        // Vi letar i listan: "Finns det någon kund här som har samma ID som den vi vill uppdatera?"
+        // (x => x.Id == customer.Id) är sökfiltret.
         var existingCustomer = _customers.FirstOrDefault(x => x.Id == customer.Id);
+
+        // Om vi hittade en matchande kund(den är inte null)...
         if (existingCustomer != null)
         {
-            // Uppdatera värdena
+            // Vi tar reda på vilket index (vilken plats i kön/listan, t.ex. plats 0, 1 eller 2) den gamla kunden har.
             var index = _customers.IndexOf(existingCustomer);
+
+            // Vi ersätetter den gamla kunden med den uppdaterade kunden på samma plats i listan.
             _customers[index] = customer;
 
             await SaveToFile();
@@ -75,12 +91,22 @@ public class CustomerRepository : ICustomerRepository
 
     public async Task DeleteAsync(Guid id)
     {
+        // Vi hämtar den allra senaste versionen av listan från filen.
+    // Detta gör vi för att vara säkra på att vi inte jobbar med gammal data.
         _customers = await GetAllAsync();
 
+
+        // Vi söker igenom listan: "Hitta den kund som har samma ID som det vi skickade in".
+    // Om ingen hittas blir variabeln 'customer' null (tom).
         var customer = _customers.FirstOrDefault(x => x.Id == id);
+
+        // Om kunden är null (inte finns) hoppar vi över detta block så att appen inte kraschar.
         if (customer != null)
         {
+            // Vi tar bort kunden från vår lista i minnet (RAM-minnet)
             _customers.Remove(customer);
+
+            // När listan är uppdaterad sparar vi den tillbaka till filen.
             await SaveToFile();
         }
     }
@@ -94,11 +120,13 @@ public class CustomerRepository : ICustomerRepository
     // Hjälpmetod för att spara
     private async Task SaveToFile()
     {
-        // 1. Använd DIN formatter för att göra om listan till text
+        // Serialiserar listan till JSON-format med hjälp av min formatter så att den går att spara.
         var json = _formatter.Serialize(_customers);
 
-        // 2. Skriv texten till filen
+        // Använder "await" här för att operationen ska ske asynkront – då fryser inte programmet medan datorn jobbar med filen.
+        // Sparar textsträngen till filen på hårddisken.
         await File.WriteAllTextAsync(_filePath, json);
+
     }
 }
 
