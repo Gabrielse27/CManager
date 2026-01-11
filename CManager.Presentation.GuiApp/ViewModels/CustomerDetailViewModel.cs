@@ -13,36 +13,6 @@ using Application = Microsoft.Maui.Controls.Application;
 using Button = Microsoft.Maui.Controls.Button;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 namespace CManager.Presentation.GuiApp.ViewModels;
 
 // "partial" krävs för att CommunityToolkit ska kunna generera bakgrundskod (som INotifyPropertyChanged).
@@ -116,47 +86,6 @@ public partial class CustomerDetailViewModel : ObservableObject
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-        [RelayCommand]
-         public async Task DeleteCustomer()
-         {
-             // 1. Fråga användaren först (säkerhet)
-             bool answer = await Shell.Current.DisplayAlert("Varning", $"Vill du ta bort {Customer.FirstName}?", "Ja", "Nej");
-
-             if (!answer) return; // Om de svara Nej, gör inget.
-
-             // 2. Ta bort kunden via servicen
-             if (Customer != null)
-             {
-                 await _customerService.DeleteCustomerAsync(Customer.Id);
-             }
-
-             // 3. Navigera tillbaka till listan
-             // Eftersom du redan har _mainViewModel injicerad (jag ser den på din bild!), använd den:
-             _mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CustomersPageViewModel>();
-         }  */
-
-
-
-
-
     [RelayCommand]
     private void Cancel()
     {
@@ -177,3 +106,24 @@ public partial class CustomerDetailViewModel : ObservableObject
         //_mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CustomersPageViewModel>();
     }
 }
+
+
+/*
+        [RelayCommand]
+         public async Task DeleteCustomer()
+         {
+             // 1. Fråga användaren först (säkerhet)
+             bool answer = await Shell.Current.DisplayAlert("Varning", $"Vill du ta bort {Customer.FirstName}?", "Ja", "Nej");
+
+             if (!answer) return; // Om de svara Nej, gör inget.
+
+             // 2. Ta bort kunden via servicen
+             if (Customer != null)
+             {
+                 await _customerService.DeleteCustomerAsync(Customer.Id);
+             }
+
+             // 3. Navigera tillbaka till listan
+             // Eftersom du redan har _mainViewModel injicerad (jag ser den på din bild!), använd den:
+             _mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<CustomersPageViewModel>();
+         }  */

@@ -17,7 +17,7 @@ namespace CManager.Domain
         public string Phone { get; set; } = "";
 
         // Adress
-        //public string Address { get; set; } = "";
+        // public string Address { get; set; } = "";
         public string Street { get; set; } = "";
         public string PostalCode { get; set; } = "";
         public string City { get; set; } = "";

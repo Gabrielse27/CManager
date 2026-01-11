@@ -29,8 +29,8 @@ namespace CManager.Application.Interfaces;
     }
 
 
-    // huvud-interface som binder ihop dem.
-    // Detta är det interface du injicerar i din Service.
+    // Huvud-interface som binder ihop dem.
+    // Detta är det interface du injicerar i  Service.
     public interface ICustomerRepository : IReadRepository , IWriteRepository
    {
     //den ärver allt från de två ovanför.

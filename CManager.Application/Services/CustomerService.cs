@@ -9,13 +9,13 @@ using CManager.Application.Helpers;
 namespace CManager.Application.Services;
 
 // Servicen implementerar interface för att vi ska kunna använda Dependency Injection.
-public class CustomerService : ICustomerService
+public class CustomerService  : ICustomerService
 {
     // Vi skapar ett fält för Repositoryt. Servicen "äger" inte datan, den bara lånar Repositoryt.
     private readonly ICustomerRepository _customerRepository;
 
     // KONSTRUKTORN(Dependency Injection)
-    // När appen startar (i MauiProgram.cs) skickas automatiskt ett färdigt Repository in här.
+    // När appen startar (i MauiProgram ) skickas automatiskt ett färdigt Repository in här.
     public CustomerService(ICustomerRepository customerRepository)
     {
         _customerRepository = customerRepository;
